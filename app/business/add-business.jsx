@@ -80,14 +80,10 @@ const AddBusiness = () => {
     const blob = await res.blob();
 
     const imageRef = ref(storage, "business-app/" + fileName);
-
     uploadBytes(imageRef, blob)
-      .then((snapshot) => {
-        console.log("snapshot");
-      })
+      .then(() => console.log("uploaded..."))
       .then((res) => {
         getDownloadURL(imageRef).then(async (downloadUrl) => {
-          console.log(downloadUrl);
           saveBusinessDetail(downloadUrl);
         });
       });
