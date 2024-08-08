@@ -1,18 +1,26 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { db } from "../../configs/FirebaseConfig";
 import { Colors } from "../../constants/Colors";
 import PopularBusinessCard from "./PopularBusinessCard";
 
 const PopularBusiness = () => {
   const [businessList, setBusinessList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getBusinessList();
   }, []);
 
   const getBusinessList = async () => {
+    setLoading(true);
     setBusinessList([]);
     const q = query(collection(db, "BusinessList"));
     const querySnapshot = await getDocs(q);
@@ -22,6 +30,7 @@ const PopularBusiness = () => {
         { id: doc.id, ...doc.data() },
       ]);
     });
+    setLoading(false);
   };
   return (
     <View>
@@ -54,14 +63,18 @@ const PopularBusiness = () => {
           View All
         </Text>
       </View>
-      <FlatList
-        data={businessList}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item, index }) => (
-          <PopularBusinessCard business={item} key={index} />
-        )}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color={Colors.PRIMARY} />
+      ) : (
+        <FlatList
+          data={businessList}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <PopularBusinessCard business={item} key={index} />
+          )}
+        />
+      )}
     </View>
   );
 };

@@ -9,7 +9,7 @@ const PopularBusinessCard = ({ business }) => {
     <TouchableOpacity
       onPress={() => router.push("/businessdetail/" + business.id)}
       style={{
-        marginLeft: 20,
+        marginLeft: 10,
         padding: 10,
         backgroundColor: "#fff",
         borderRadius: 15,
