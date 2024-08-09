@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-expo";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useState } from "react";
@@ -24,6 +24,7 @@ const AddBusiness = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [formValues, setFormValues] = useState({
     name: "",
     address: "",
@@ -85,6 +86,7 @@ const AddBusiness = () => {
       .then((res) => {
         getDownloadURL(imageRef).then(async (downloadUrl) => {
           saveBusinessDetail(downloadUrl);
+          router.push("/profile");
         });
       });
     setLoading(false);
@@ -203,6 +205,7 @@ const AddBusiness = () => {
             }
             style={{ ...styles.textInput }}
           >
+            <Picker.Item label="Select Category" />
             {categoryList.map((item, index) => (
               <Picker.Item key={index} label={item.label} value={item.value} />
             ))}
@@ -211,7 +214,7 @@ const AddBusiness = () => {
       </View>
       <TouchableOpacity disabled={loading} onPress={() => onAddNewBusiness()}>
         {loading ? (
-          <ActivityIndicator size={"large"} color={"#fff"} />
+          <ActivityIndicator size={"large"} color={Colors.PRIMARY} />
         ) : (
           <Text
             style={{

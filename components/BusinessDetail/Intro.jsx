@@ -1,11 +1,35 @@
+import { useUser } from "@clerk/clerk-expo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
+import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { db } from "../../configs/FirebaseConfig";
 import { Colors } from "../../constants/Colors";
 
 const Intro = ({ business }) => {
   const router = useRouter();
+  const { user } = useUser();
+
+  const handleDelete = async () => {
+    await deleteDoc(doc(db, "BusinessList", business?.id));
+    router.back();
+    ToastAndroid.show("Business Deleted", ToastAndroid.LONG);
+  };
+  const onDelete = () => {
+    Alert.alert("Notice", "Do you really want to delete", [
+      { text: "No", onPress: () => {} },
+      { text: "Yes", onPress: () => handleDelete() },
+    ]);
+  };
   return (
     <View>
       <View
@@ -35,16 +59,27 @@ const Intro = ({ business }) => {
           backgroundColor: "#fff",
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <Text style={{ fontFamily: "outfit-bold", fontSize: 26 }}>
-          {business.name}
-        </Text>
-        <Text
-          style={{ fontFamily: "outfit", color: Colors.GRAY, fontSize: 15 }}
-        >
-          {business.address}
-        </Text>
+        <View>
+          <Text style={{ fontFamily: "outfit-bold", fontSize: 26 }}>
+            {business.name}
+          </Text>
+          <Text
+            style={{ fontFamily: "outfit", color: Colors.GRAY, fontSize: 15 }}
+          >
+            {business.address}
+          </Text>
+        </View>
+        {user?.primaryEmailAddress?.emailAddress == business?.userEmail && (
+          <TouchableOpacity onPress={() => onDelete()}>
+            <Ionicons name="trash" size={24} color="red" />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
