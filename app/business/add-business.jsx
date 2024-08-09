@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -110,122 +111,128 @@ const AddBusiness = () => {
   };
 
   return (
-    <View
-      style={{
-        padding: 20,
-      }}
-    >
-      <Text
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View
         style={{
-          fontFamily: "outfit-bold",
-          fontSize: 20,
+          padding: 20,
         }}
       >
-        Add New Business
-      </Text>
-      <Text
-        style={{
-          fontFamily: "outfit",
-          color: Colors.GRAY,
-        }}
-      >
-        Fill all the details in order to add new business
-      </Text>
-      <TouchableOpacity
-        style={{
-          marginTop: 20,
-        }}
-        onPress={() => onImagePick()}
-      >
-        {!image ? (
-          <Image
-            source={require("../../assets/images/placeholder.png")}
-            style={{
-              width: 100,
-              height: 100,
-            }}
-          />
-        ) : (
-          <Image
-            source={{ uri: image }}
-            style={{
-              width: 100,
-              height: 100,
-              borderRadius: 15,
-            }}
-          />
-        )}
-      </TouchableOpacity>
-
-      <View>
-        <TextInput
-          value={formValues.name}
-          onChangeText={(text) => handleInputChange("name", text)}
-          placeholder="Name"
+        <Text
           style={{
-            ...styles.textInput,
+            fontFamily: "outfit-bold",
+            fontSize: 20,
+          }}
+        >
+          Add New Business
+        </Text>
+        <Text
+          style={{
+            fontFamily: "outfit",
+            color: Colors.GRAY,
+          }}
+        >
+          Fill all the details in order to add new business
+        </Text>
+        <TouchableOpacity
+          style={{
             marginTop: 20,
           }}
-        />
-        <TextInput
-          value={formValues.address}
-          onChangeText={(text) => handleInputChange("address", text)}
-          placeholder="Address"
-          style={styles.textInput}
-        />
-        <TextInput
-          value={formValues.contact}
-          onChangeText={(text) => handleInputChange("contact", text)}
-          placeholder="Contact"
-          style={styles.textInput}
-        />
-        <TextInput
-          value={formValues.website}
-          onChangeText={(text) => handleInputChange("website", text)}
-          placeholder="Website"
-          style={styles.textInput}
-        />
-        <TextInput
-          multiline
-          numberOfLines={5}
-          placeholder="About"
-          style={{
-            ...styles.textInput,
-            height: 100,
-            textAlignVertical: "top",
-          }}
-          value={formValues.about}
-          onChangeText={(text) => handleInputChange("about", text)}
-        />
+          onPress={() => onImagePick()}
+        >
+          {!image ? (
+            <Image
+              source={require("../../assets/images/placeholder.png")}
+              style={{
+                width: 100,
+                height: 100,
+              }}
+            />
+          ) : (
+            <Image
+              source={{ uri: image }}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 15,
+              }}
+            />
+          )}
+        </TouchableOpacity>
+
         <View>
-          <Picker
-            selectedValue={selectedCategory}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedCategory(itemValue)
-            }
-            style={{ ...styles.textInput }}
-          >
-            <Picker.Item label="Select Category" />
-            {categoryList.map((item, index) => (
-              <Picker.Item key={index} label={item.label} value={item.value} />
-            ))}
-          </Picker>
-        </View>
-      </View>
-      <TouchableOpacity disabled={loading} onPress={() => onAddNewBusiness()}>
-        {loading ? (
-          <ActivityIndicator size={"large"} color={Colors.PRIMARY} />
-        ) : (
-          <Text
+          <TextInput
+            value={formValues.name}
+            onChangeText={(text) => handleInputChange("name", text)}
+            placeholder="Name"
             style={{
-              ...styles.btn,
+              ...styles.textInput,
+              marginTop: 20,
             }}
-          >
-            Add Business
-          </Text>
-        )}
-      </TouchableOpacity>
-    </View>
+          />
+          <TextInput
+            value={formValues.address}
+            onChangeText={(text) => handleInputChange("address", text)}
+            placeholder="Address"
+            style={styles.textInput}
+          />
+          <TextInput
+            value={formValues.contact}
+            onChangeText={(text) => handleInputChange("contact", text)}
+            placeholder="Contact"
+            style={styles.textInput}
+          />
+          <TextInput
+            value={formValues.website}
+            onChangeText={(text) => handleInputChange("website", text)}
+            placeholder="Website"
+            style={styles.textInput}
+          />
+          <TextInput
+            multiline
+            numberOfLines={5}
+            placeholder="About"
+            style={{
+              ...styles.textInput,
+              height: 100,
+              textAlignVertical: "top",
+            }}
+            value={formValues.about}
+            onChangeText={(text) => handleInputChange("about", text)}
+          />
+          <View>
+            <Picker
+              selectedValue={selectedCategory}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedCategory(itemValue)
+              }
+              style={{ ...styles.textInput }}
+            >
+              <Picker.Item label="Select Category" />
+              {categoryList.map((item, index) => (
+                <Picker.Item
+                  key={index}
+                  label={item.label}
+                  value={item.value}
+                />
+              ))}
+            </Picker>
+          </View>
+        </View>
+        <TouchableOpacity disabled={loading} onPress={() => onAddNewBusiness()}>
+          {loading ? (
+            <ActivityIndicator size={"large"} color={Colors.PRIMARY} />
+          ) : (
+            <Text
+              style={{
+                ...styles.btn,
+              }}
+            >
+              Add Business
+            </Text>
+          )}
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
