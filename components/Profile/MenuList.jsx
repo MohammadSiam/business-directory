@@ -1,8 +1,10 @@
+import { useAuth } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
   FlatList,
   Image,
+  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,6 +14,7 @@ import { Colors } from "../../constants/Colors";
 
 const MenuList = () => {
   const router = useRouter();
+  const { signOut } = useAuth();
 
   const menuList = [
     {
@@ -30,16 +33,26 @@ const MenuList = () => {
       id: 3,
       name: "Share App",
       icon: require("../../assets/images/share_1.png"),
-      path: "",
+      path: "share",
     },
     {
       id: 4,
       name: "Logout",
       icon: require("../../assets/images/logout.png"),
-      path: "",
+      path: "logout",
     },
   ];
   const onMenuClick = (item) => {
+    if (item.path == "logout") {
+      signOut();
+      return;
+    }
+    if (item.path == "share") {
+      Share.share({
+        message: "Download the business app",
+      });
+      return;
+    }
     router.push(item.path);
   };
   return (
